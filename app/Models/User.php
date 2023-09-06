@@ -58,4 +58,15 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+    // Each user can participate in many conversations
+    public function conversations()
+    {
+        return $this->belongsToMany(Conversation::class, 'participants');
+    }
+
+    // Each user can send many messages
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
 }
