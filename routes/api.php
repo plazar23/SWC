@@ -35,7 +35,8 @@ Route::apiResource('conversations', ConversationController::class);
 Route::apiResource('messages', MessageController::class);
 Route::apiResource('participants', ParticipantController::class);
 Route::apiResource('users', UserController::class);
-
+Route::get('/conversations/{conversation_id}/participants', [ConversationController::class, 'getParticipants']);
+Route::get('/user/{user_id}/conversations', [ConversationController::class, 'userConversations']);
 
 
 Route::prefix('auth')->group(function () {
