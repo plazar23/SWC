@@ -82,4 +82,34 @@ class ConversationController extends Controller
         return response()->json(['message' => 'Conversation deleted successfully'], 200);
     }
 
+    public function getParticipants($conversation_id)
+    {
+        // Fetch the conversation
+        $conversation = Conversation::find($conversation_id);
+
+        if (!$conversation) {
+            return response()->json(['message' => 'Conversation not found'], 404);
+        }
+
+        // Fetch the participants (users) for this conversation
+        $participants = $conversation->participants->toArray();
+
+        return response()->json($participants);
+    }
+
+    public function userConversations($user_id)
+    {
+        // Get the user by ID
+        $user = User::find($user_id);
+
+        // Check if the user exists
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        // Get conversations of the user
+        $conversations = $user->conversations;
+
+        return response()->json($conversations);
+    }
 }
