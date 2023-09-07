@@ -1,8 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Api;
+
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\MessageResource;
+use App\Models\Message;
+use App\Http\Requests\MessageRequest;
 
 class MessageController extends Controller
 {
@@ -12,7 +17,7 @@ class MessageController extends Controller
     public function index()
     {
         $messages = Message::all();
-        return MessageResource::collection($messages);
+        return response()->json(['messages' => $messages], 200);    
     }
 
     /**
@@ -26,9 +31,9 @@ class MessageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(MessageRequest $request)
     {
-        $data = $request->validate([
+       $data = $request->validate([
             'conversation_id' => 'required|exists:conversations,id',
             'sender_id' => 'required|exists:users,id',
             'content' => 'required|string',
@@ -36,7 +41,7 @@ class MessageController extends Controller
     
         $message = Message::create($data);
     
-        return new MessageResource($message);
+        return response()->json(['message' => $message], 201);
     }
 
     /**
@@ -44,7 +49,7 @@ class MessageController extends Controller
      */
     public function show(Message $message)
     {
-        return new MessageResource($message);
+        return response()->json(['message' => $message], 200);
     }
 
     /**
@@ -58,7 +63,7 @@ class MessageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Message $message)
+    public function update(MessageRequest $request, Message $message)
     {
         $data = $request->validate([
             'content' => 'sometimes|string',

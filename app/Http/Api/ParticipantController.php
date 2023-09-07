@@ -1,20 +1,32 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\ParticipantRequest;
+use App\Http\Resources\ParticipantResource;
+use App\Models\Participant;
+
 
 class ParticipantController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index($conversationId)
+    public function index()
     {
-        $participants = Participant::where('conversation_id', $conversationId)->get();
+        $participants = Participant::all();
 
-        return ParticipantResource::collection($participants);
+        return response()->json(['participants' => $participants], 200);    
     }
+
+    // public function index($userId)
+    // {
+    //     $participants = Participant::where('user_id', $userId)->get();
+
+    //     return response()->json(['coversations'=> $conversations], 200);    
+    // }
     /**
      * Show the form for creating a new resource.
      */
@@ -41,7 +53,7 @@ class ParticipantController extends Controller
     {
         $participant = Participant::findOrFail($id);
 
-        return new ParticipantResource($participant);
+        return response()->json(['participant' => $participant], 200);  
     }
 
     /**

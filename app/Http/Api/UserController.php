@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -15,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return UserResource::collection($users);
+        return response()->json(['users' => $users], 200);
     }
 
     /**
@@ -35,7 +37,7 @@ class UserController extends Controller
         $data['password'] = Hash::make($data['password']);
         $user = User::create($data);
 
-        return new UserResource($user);
+        return response()->json(['user' => $user], 200);
     }
     
 
@@ -44,7 +46,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return new UserResource($user);
+        return response()->json(['user' => $user], 200);
     }
 
     /**

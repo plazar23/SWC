@@ -1,8 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Api;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ConversationResource;
+use App\Models\Conversation;
+use App\Http\Requests\ConversationRequest;
+
 
 class ConversationController extends Controller
 {
@@ -12,7 +17,7 @@ class ConversationController extends Controller
     public function index()
     {
         $conversations = Conversation::all();
-        return ConversationResource::collection($conversations);
+        return response()->json(['conversations' => $conversations], 200);
     }
 
     /**
@@ -26,7 +31,7 @@ class ConversationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ConversationRequest $request)
 {
     $data = $request->validate([
         'title' => 'required|string|max:255',
@@ -34,14 +39,14 @@ class ConversationController extends Controller
 
     $conversation = Conversation::create($data);
 
-    return new ConversationResource($conversation);
+    return response()->json(['conversation' => $conversation], 201);
 }
     /**
      * Display the specified resource.
      */
     public function show(Conversation $conversation)
     {
-        return new ConversationResource($conversation);
+        return response()->json(['conversation' => $conversation], 200);
     }
 
 
