@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ConversationResource;
 use App\Models\Conversation;
 use App\Http\Requests\ConversationRequest;
-
+use App\Models\User;
+use App\Models\Message;
 
 class ConversationController extends Controller
 {
@@ -111,5 +112,20 @@ class ConversationController extends Controller
         $conversations = $user->conversations;
 
         return response()->json($conversations);
+    }
+
+    public function getMessages($conversation_id)
+    {
+        // Fetch the conversation by ID
+        $conversation = Conversation::find($conversation_id);
+
+        if (!$conversation) {
+            return response()->json(['error' => 'Conversation not found'], 404);
+        }
+
+        // Get messages of the conversation
+        $messages = $conversation->messages;
+
+        return response()->json($messages);
     }
 }

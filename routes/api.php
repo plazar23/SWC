@@ -31,13 +31,13 @@ use App\Http\Api\Auth\RegisterController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::get('conversations/{conversation_id}/messages', [ConversationController::class, 'getMessages']);
+Route::get('/conversations/{conversation_id}/participants', [ConversationController::class, 'getParticipants']);
 Route::apiResource('conversations', ConversationController::class);
 Route::apiResource('messages', MessageController::class);
 Route::apiResource('participants', ParticipantController::class);
+Route::get('/users/{user_id}/conversations', [ConversationController::class, 'userConversations']);
 Route::apiResource('users', UserController::class);
-Route::get('/conversations/{conversation_id}/participants', [ConversationController::class, 'getParticipants']);
-Route::get('/user/{user_id}/conversations', [ConversationController::class, 'userConversations']);
-
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', LoginController::class);
